@@ -16,7 +16,7 @@
   brokers: BrokerListExtended,
   brokersViews: Map[Int, BVView],
   formErrors: Seq[FormError]
-)(implicit af: features.ApplicationFeatures, 
+)(implicit af: features.ApplicationFeatures,
 cf: kafka.manager.features.ClusterFeatures, messages: play.api.i18n.Messages, menus: models.navigation.Menus, request:RequestHeader)
 
 @implicitFieldConstructor = @{ b4.vertical.fieldConstructor() }
@@ -35,7 +35,7 @@ cf: kafka.manager.features.ClusterFeatures, messages: play.api.i18n.Messages, me
 @replicaSelection(topicIdx: Int, assignIdx: Int, brokerIndex: Int, brokerId: Int) = {
     @if(brokers.list.filter({broker => broker.id == brokerId}).size > 0) {
     <span style="background-color: @toColor(brokerId) ;">
-      <select onchange="this.parentNode.setAttribute('style', 
+      <select onchange="this.parentNode.setAttribute('style',
         this.options[this.selectedIndex].getAttribute('style'))"
         name="topics[@topicIdx].assignments[@assignIdx].brokers[@brokerIndex]">
         @brokers.list.map { case broker =>
@@ -45,8 +45,19 @@ cf: kafka.manager.features.ClusterFeatures, messages: play.api.i18n.Messages, me
       </select>
       &nbsp;&nbsp;&nbsp;</span>
     } else {
+    <span style="background-color: @toColor(brokerId) ;">
+      <select onchange="this.parentNode.setAttribute('style',
+        this.options[this.selectedIndex].getAttribute('style'))"
+        name="topics[@topicIdx].assignments[@assignIdx].brokers[@brokerIndex]">
+        @brokers.list.map { case broker =>
+        <option style="background-color: @toColor(broker.id); color: @reverseColor(color(broker.id));"
+        value="@broker.id" @if(broker.id == brokerId){selected}>Broker @broker.id</option>
+        }
+        <option style="background-color: @toColor(brokerId); color: @reverseColor(color(brokerId));"
+        value="@brokerId" selected>Broker @brokerId</option>
+      </select>
+      &nbsp;&nbsp;&nbsp;</span>
         <small style="color:red">Broker Down!</small>
-        <script>window.onload = function() {disableSubmission()}</script>
     }
 }
 
