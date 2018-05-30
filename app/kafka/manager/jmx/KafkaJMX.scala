@@ -213,7 +213,7 @@ object KafkaMetrics {
   private def queryValues[K, V](
     mbsc: MBeanServerConnection,
     objectName: ObjectName,
-    keyConverter: String => K,
+    keyConverter: ObjectName => K,
     valueConverter: Object => V
     ) = {
     val logsSizeObjectNames = mbsc.queryNames(objectName, null).asScala.toSeq
@@ -225,7 +225,7 @@ object KafkaMetrics {
   private def queryValue[K, V](
     mbsc: MBeanServerConnection,
     objectName: ObjectName,
-    keyConverter: String => K,
+    keyConverter: ObjectName => K,
     valueConverter: Object => V
     ) = {
     // val name = objectName.getKeyProperty("name")
